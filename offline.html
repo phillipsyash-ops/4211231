@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Offline · Loyal</title><meta name="theme-color" content="#f6f6f4">
+<style>
+:root{color-scheme:light dark}
+body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Inter,-apple-system,system-ui,sans-serif;background:#f6f6f4;color:#141414;text-align:center;padding:24px;box-sizing:border-box}
+@media (prefers-color-scheme:dark){body{background:#0c0c0d;color:#f2f2f0}p{color:#9a9a96!important}button{background:#f2f2f0!important;color:#111!important}}
+img{width:88px;height:88px;border-radius:50%;box-shadow:0 12px 40px rgba(0,0,0,.18);animation:f 3s ease-in-out infinite}
+@keyframes f{50%{transform:translateY(-6px)}}
+h1{font-size:22px;margin:22px 0 8px;letter-spacing:-.02em}p{margin:0 0 22px;color:#6b6b66;font-size:15px;line-height:1.5}
+button{border:0;border-radius:12px;background:#141414;color:#fff;font:600 15px Inter,system-ui,sans-serif;padding:13px 26px}
+</style></head><body>
+<div><img src="assets/logo/coin-128.png" alt=""><h1>No connection</h1><p>Loyal needs the internet to show your balances.<br>Check your connection and try again.</p>
+<button onclick="location.reload()">Try again</button></div>
+<script>addEventListener('online', () => location.reload());</script>
+</body></html>

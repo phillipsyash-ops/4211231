@@ -1,0 +1,4 @@
+[10-Nov-2026 18:29:56 Europe/Moscow] PHP Fatal error:  Uncaught Error: Undefined constant "Blockchain" in /home/girohzut/loyal-true.com/index.php:19
+Stack trace:
+#0 {main}
+  thrown in /home/girohzut/loyal-true.com/index.php on line 19
