@@ -1,0 +1,195 @@
+/* =========================================================================
+   Loyal — phone app layer (PWA).
+   html.is-app  = opened from the home-screen icon.
+   The max-width rules below also tidy the cabinet in a phone browser.
+   ========================================================================= */
+
+/* ---------- phones (browser and app) ---------- */
+@media (max-width: 760px) {
+  input, select, textarea { font-size: 16px !important; }          /* no zoom-in on focus (iOS) */
+  .ext-card { display: none !important; }                          /* browser extensions don't exist on phones */
+  .app-page .side {
+    position: static; display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory;
+    margin: 0; padding: 2px 0 6px; scrollbar-width: none;
+  }
+  .app-page .side::-webkit-scrollbar { display: none; }
+  .wrap.app > * { min-width: 0; }
+  .wrap.app { grid-template-columns: minmax(0, 1fr) !important; }
+
+  .app-page .side h4 { display: none; }
+  .app-page .side .wl { flex: 0 0 auto; scroll-snap-align: start; min-width: 150px; border: 1px solid var(--line); background: var(--card); }
+  .app-page .side .wl.on { border-color: var(--txt); }
+  .app-page .side .new-w { min-width: 0; justify-content: center; }
+  .anns { gap: 8px; margin-top: 10px; }
+  .ann { padding: 11px 13px; gap: 10px; }
+  .ann b { font-size: 14px; }
+  .ann p { font-size: 13px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .ann small { font-size: 11px; }
+  .anns.folded .ann:nth-child(n+2) { display: none; }
+  .anns-more { justify-self: start; border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 999px; padding: 6px 12px; font: 600 12px Inter, system-ui, sans-serif; cursor: pointer; }
+  /* wallet switcher: compact pills */
+  .app-page .side .wl { min-width: 0; padding: 7px 12px 7px 7px; border-radius: 999px; gap: 8px; }
+  .app-page .side .wl .av { width: 30px; height: 30px; border-radius: 50%; font-size: 13px; }
+  .app-page .side .wl b { font-size: 13px; }
+  .app-page .side .wl small { font-size: 11px; }
+  .app-page .side .new-w { padding: 7px 14px; font-size: 13px; }
+  /* modals become bottom sheets */
+  .modal { align-items: flex-end; padding: 0; }
+  .modal .panel { width: 100%; max-width: none; border-radius: 22px 22px 0 0; max-height: 88vh; padding-bottom: calc(22px + env(safe-area-inset-bottom)); animation: sheetUp .32s cubic-bezier(.2, .9, .3, 1); }
+}
+@keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* ---------- inside the installed app ---------- */
+html.is-app { -webkit-tap-highlight-color: transparent; }
+html.is-app body { padding-bottom: calc(78px + env(safe-area-inset-bottom)); overscroll-behavior-y: none; }
+html.is-app .nav { padding-top: env(safe-area-inset-top); }
+html.is-app .nav .wrap { height: 56px; }
+html.is-app .nav-links, html.is-app .nav-cta .btn { display: none !important; }
+html.is-app .cab-tabs { display: none; }
+html.is-app .foot { display: none; }
+html.is-app .loader { display: none !important; }                  /* no splash between screens — feels native */
+html.is-app body:not(.ready) main { opacity: 1 !important; }      /* show the page as soon as it arrives */
+html.is-app main { padding-top: 6px; }
+html.is-app .page-head h1 { font-size: 30px; }
+html.is-app .rv { opacity: 1 !important; transform: none !important; }  /* no scroll-reveal delays */
+html.is-app a, html.is-app button { touch-action: manipulation; }
+
+/* bottom tab bar */
+.app-bar { display: none; }
+html.is-app .app-bar {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
+  padding: 6px 6px calc(6px + env(safe-area-inset-bottom));
+  background: var(--nav); backdrop-filter: blur(18px) saturate(1.4); -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  border-top: 1px solid var(--line);
+}
+.app-bar a, .app-bar button {
+  display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 6px 0 4px;
+  font: 600 10.5px/1.1 Inter, system-ui, sans-serif; letter-spacing: .01em; color: var(--muted);
+  background: none; border: 0; border-radius: 12px; cursor: pointer; text-decoration: none;
+}
+.app-bar svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+.app-bar .on { color: var(--txt); }
+.app-bar .on svg { stroke-width: 2.2; transform: translateY(-1px); }
+.app-bar a:active svg, .app-bar button:active svg { transform: scale(.88); }
+
+/* "More" sheet */
+.app-more { position: fixed; inset: 0; z-index: 95; display: none; background: var(--overlay); backdrop-filter: blur(6px); }
+.app-more.open { display: flex; align-items: flex-end; animation: fadeIn .18s; }
+.app-more .sheet {
+  width: 100%; background: var(--card); border-radius: 22px 22px 0 0; border-top: 1px solid var(--line);
+  padding: 10px 14px calc(18px + env(safe-area-inset-bottom)); animation: sheetUp .3s cubic-bezier(.2, .9, .3, 1);
+}
+.app-more .grab { width: 38px; height: 5px; border-radius: 3px; background: var(--line2); margin: 2px auto 12px; }
+.app-more a, .app-more button.row {
+  display: flex; align-items: center; gap: 14px; width: 100%; padding: 14px 10px; border: 0; background: none;
+  font: 500 16px Inter, system-ui, sans-serif; color: var(--txt); border-radius: 12px; text-align: left; cursor: pointer;
+}
+.app-more a:active, .app-more button.row:active { background: var(--card2); }
+.app-more svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; color: var(--muted); }
+.app-more .danger { color: #d9534f; }
+.app-more .danger svg { color: #d9534f; }
+.app-more hr { border: 0; border-top: 1px solid var(--line); margin: 6px 0; }
+
+/* pull to refresh */
+.app-ptr { position: fixed; left: 50%; top: calc(env(safe-area-inset-top) + 64px); z-index: 80; width: 36px; height: 36px; margin-left: -18px;
+  border-radius: 50%; background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow); display: grid; place-items: center;
+  transform: translateY(-80px); opacity: 0; transition: opacity .15s; pointer-events: none; }
+.app-ptr svg { width: 18px; height: 18px; stroke: var(--txt); fill: none; stroke-width: 2.2; stroke-linecap: round; }
+.app-ptr.spin svg { animation: ptrSpin .8s linear infinite; }
+@keyframes ptrSpin { to { transform: rotate(360deg); } }
+
+/* "Install the app" banner (phone browser) */
+.app-install {
+  position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 85;
+  display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; border-radius: 18px;
+  background: var(--card); border: 1px solid var(--line); box-shadow: 0 18px 50px rgba(0, 0, 0, .18); animation: sheetUp .4s cubic-bezier(.2, .9, .3, 1);
+}
+.app-install img { width: 44px; height: 44px; border-radius: 11px; flex: none; }
+.app-install .t { flex: 1; min-width: 0; }
+.app-install b { display: block; font-size: 14px; }
+.app-install small { display: block; font-size: 12px; color: var(--muted); }
+.app-install .go { border: 0; border-radius: 11px; background: var(--a); color: var(--at); font: 600 14px Inter, system-ui, sans-serif; padding: 10px 14px; cursor: pointer; }
+.app-install .x { border: 0; background: none; color: var(--dim); font-size: 22px; padding: 0 4px; cursor: pointer; }
+html.is-app .app-install { display: none; }
+
+/* iPhone: how to add to the Home Screen */
+.app-ios { position: fixed; inset: 0; z-index: 120; display: flex; align-items: flex-end; background: var(--overlay); backdrop-filter: blur(6px); animation: fadeIn .2s; }
+.app-ios .sheet { width: 100%; background: var(--card); border-radius: 22px 22px 0 0; padding: 18px 20px calc(24px + env(safe-area-inset-bottom)); animation: sheetUp .3s cubic-bezier(.2, .9, .3, 1); }
+.app-ios h3 { margin: 6px 0 4px; font-size: 19px; }
+.app-ios p { margin: 0 0 14px; color: var(--muted); font-size: 14px; }
+.app-ios ol { margin: 0 0 18px; padding: 0; list-style: none; counter-reset: s; }
+.app-ios li { counter-increment: s; display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 15px; }
+.app-ios li:last-child { border-bottom: 0; }
+.app-ios li::before { content: counter(s); width: 26px; height: 26px; border-radius: 50%; background: var(--card2); border: 1px solid var(--line); display: grid; place-items: center; font-size: 13px; font-weight: 700; flex: none; }
+.app-ios .ic { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--card2); border: 1px solid var(--line); vertical-align: middle; margin: 0 2px; }
+.app-ios .ic svg { width: 18px; height: 18px; stroke: #2f7bf6; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.app-ios .arrow { position: fixed; bottom: calc(6px + env(safe-area-inset-bottom)); left: 50%; margin-left: -14px; font-size: 26px; animation: bob 1.2s ease-in-out infinite; color: #fff; text-shadow: 0 2px 8px rgba(0, 0, 0, .4); }
+@keyframes bob { 50% { transform: translateY(6px); } }
+
+/* Settings → "Loyal app" block (added by the app script) */
+.app-set .badge { margin-left: 6px; }
+
+/* smooth cross-fade between screens (Chrome/Android, Safari 18.2+) */
+@media (max-width: 760px) { @view-transition { navigation: auto; } }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .16s; }
+html.is-app .app-bar { view-transition-name: app-bar; }
+html.is-app .nav { view-transition-name: app-nav; }
+
+/* thin progress line while the next screen loads */
+.app-progress { position: fixed; left: 0; top: 0; height: 2.5px; width: 0; z-index: 200; background: var(--txt);
+  padding-top: env(safe-area-inset-top); background-clip: content-box; transition: width 8s cubic-bezier(.1, .7, .2, 1), opacity .2s; }
+.app-progress.go { width: 92%; }
+
+/* ---------- QR scanner ---------- */
+.scan-wrap { position: relative; }
+.scan-wrap input { padding-right: 52px !important; }
+.scan-btn { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--card2); display: grid; place-items: center; cursor: pointer; color: var(--txt); }
+.scan-btn svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.scan-btn:active { transform: translateY(-50%) scale(.92); }
+.app-scan { position: fixed; inset: 0; z-index: 300; background: #000; color: #fff; animation: fadeIn .2s; }
+.app-scan video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.app-scan .frame { position: absolute; left: 50%; top: 46%; width: min(68vw, 300px); aspect-ratio: 1; transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .55); border-radius: 22px; }
+.app-scan .frame i { position: absolute; width: 38px; height: 38px; border: 4px solid #fff; }
+.app-scan .frame i:nth-child(1) { left: -2px; top: -2px; border-right: 0; border-bottom: 0; border-radius: 22px 0 0 0; }
+.app-scan .frame i:nth-child(2) { right: -2px; top: -2px; border-left: 0; border-bottom: 0; border-radius: 0 22px 0 0; }
+.app-scan .frame i:nth-child(3) { left: -2px; bottom: -2px; border-right: 0; border-top: 0; border-radius: 0 0 0 22px; }
+.app-scan .frame i:nth-child(4) { right: -2px; bottom: -2px; border-left: 0; border-top: 0; border-radius: 0 0 22px 0; }
+.app-scan .frame b { position: absolute; left: 10%; right: 10%; height: 2px; top: 10%; background: linear-gradient(90deg, transparent, #fff, transparent); animation: scanLine 2s ease-in-out infinite; }
+@keyframes scanLine { 50% { top: 88%; } }
+.app-scan .top { position: absolute; top: calc(env(safe-area-inset-top) + 12px); right: 14px; }
+.app-scan .x { width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .18); color: #fff; font-size: 28px; line-height: 1; backdrop-filter: blur(8px); }
+.app-scan .bot { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom) + 34px); text-align: center; padding: 0 24px; }
+.app-scan .bot p { margin: 0 0 14px; font: 500 15px/1.45 Inter, system-ui, sans-serif; text-shadow: 0 1px 6px rgba(0, 0, 0, .5); }
+.app-scan .bot small { opacity: .75; }
+.app-scan .torch { border: 0; border-radius: 999px; padding: 10px 18px; background: rgba(255, 255, 255, .18); color: #fff; font: 600 14px Inter, system-ui, sans-serif; backdrop-filter: blur(8px); }
+.app-scan .torch.on { background: #fff; color: #111; }
+
+/* ---------- PIN lock ---------- */
+html.pin-locked body > *:not(.pin-lock):not(script) { visibility: hidden !important; }
+.pin-lock { position: fixed; inset: 0; z-index: 400; background: var(--bg); display: flex; align-items: center; justify-content: center;
+  padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom); animation: fadeIn .15s; }
+.pin-lock.out { opacity: 0; transition: opacity .2s; }
+.pin-box { width: 100%; max-width: 320px; text-align: center; }
+.pin-box img { width: 64px; height: 64px; border-radius: 50%; box-shadow: 0 10px 30px rgba(0, 0, 0, .15); }
+.pin-box h2 { margin: 18px 0 4px; font-size: 22px; letter-spacing: -.02em; }
+.pin-box .sub { margin: 0; color: var(--muted); font-size: 14px; min-height: 20px; }
+.pin-box .pin-dots { display: flex; justify-content: center; gap: 16px; margin: 30px 0 8px; }
+.pin-box .pin-dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--txt); transition: background .12s, transform .12s; }
+.pin-box .pin-dots i.on { background: var(--txt); transform: scale(1.08); }
+.pin-box .pin-dots.shake { animation: pinShake .4s; }
+@keyframes pinShake { 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+.pin-box .pin-err { min-height: 20px; margin: 0 0 14px; color: #d9534f; font-size: 13px; }
+.pin-box .pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 22px; justify-items: center; }
+.pin-box .pad button { width: 74px; height: 74px; border-radius: 50%; border: 1px solid var(--line); background: var(--card);
+  font: 500 28px Inter, system-ui, sans-serif; color: var(--txt); cursor: pointer; transition: background .1s, transform .1s; }
+.pin-box .pad button:active { background: var(--card2); transform: scale(.94); }
+.pin-box .pad button.ghost { border-color: transparent; background: none; font-size: 15px; color: var(--muted); }
+.pin-box .pad button.ghost[data-a="del"] { font-size: 24px; }
+.pin-box .forgot { margin-top: 22px; border: 0; background: none; color: var(--muted); font: 500 14px Inter, system-ui, sans-serif; text-decoration: underline; cursor: pointer; }
+.pin-box .len { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
+.pin-box .len button { border: 1px solid var(--line2); background: none; border-radius: 999px; padding: 6px 12px; font: 600 12px Inter, system-ui, sans-serif; color: var(--muted); cursor: pointer; }
+.pin-box .len button.on { background: var(--txt); color: var(--bg); border-color: var(--txt); }
+@media (max-height: 640px) { .pin-box .pad button { width: 62px; height: 62px; font-size: 24px; } .pin-box .pin-dots { margin-top: 18px; } }

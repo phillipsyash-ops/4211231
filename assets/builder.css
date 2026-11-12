@@ -1,0 +1,50 @@
+/* ===== «Сборка сайта»: курсоры строят страницу при открытии и прокрутке ===== */
+.vb-on .rv{opacity:1!important;transform:none!important}
+.vb-hide{visibility:hidden!important}
+.vb-h{visibility:hidden}
+
+.vb-layer{position:absolute;left:0;top:0;width:0;height:0;z-index:40;pointer-events:none}
+
+/* курсор */
+.vb-cur{position:absolute;left:0;top:0;will-change:transform;transition:opacity .45s;filter:drop-shadow(0 2px 3px rgba(0,0,0,.2))}
+.vb-cur svg{display:block;width:22px;height:22px}
+.vb-cur .cross{display:none;transform:translate(-11px,-11px)}
+.vb-cur.cross .arrow{display:none}
+.vb-cur.cross .cross{display:block}
+.vb-cur.cross .vb-tag{left:10px;top:8px}
+.vb-tag{position:absolute;left:15px;top:18px;padding:2px 8px 3px;border-radius:3px 9px 9px 9px;background:var(--c);color:#fff;font:600 11px/1.4 Inter,system-ui,sans-serif;white-space:nowrap;letter-spacing:.01em}
+
+/* рамка выделения с ручками */
+.vb-box{position:absolute;border:1.5px solid var(--c);background:color-mix(in srgb,var(--c) 7%,transparent);box-sizing:border-box}
+.vb-box i{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;background:#fff;border:1.5px solid var(--c);box-sizing:border-box}
+.vb-box .h-tl{left:0;top:0}.vb-box .h-tm{left:50%;top:0}.vb-box .h-tr{left:100%;top:0}
+.vb-box .h-ml{left:0;top:50%}.vb-box .h-mr{left:100%;top:50%}
+.vb-box .h-bl{left:0;top:100%}.vb-box .h-bm{left:50%;top:100%}.vb-box .h-br{left:100%;top:100%}
+.vb-size{position:absolute;left:50%;top:100%;margin-top:7px;transform:translateX(-50%);background:var(--c);color:#fff;font:500 10px/1 'JetBrains Mono',ui-monospace,monospace;padding:4px 6px;border-radius:4px;white-space:nowrap}
+
+/* рамка текстового слоя */
+.vb-frame{position:absolute;border:1px solid var(--c);box-sizing:border-box}
+.vb-frame b{position:absolute;left:-1px;bottom:100%;margin-bottom:4px;font:500 10px/1 'JetBrains Mono',ui-monospace,monospace;color:var(--c);white-space:nowrap}
+
+/* сетка ячеек */
+.vb-cell{position:absolute;border:1px dashed var(--c);border-radius:10px;box-sizing:border-box;background:color-mix(in srgb,var(--c) 4%,transparent)}
+
+/* клик */
+.vb-ripple{position:absolute;width:30px;height:30px;margin:-15px 0 0 -15px;border-radius:50%;border:2px solid var(--c);box-sizing:border-box}
+
+/* печать */
+.vb-caret{display:inline-block;width:2px;height:1em;margin:0 -1px;vertical-align:-.12em;background:var(--c);animation:vbBlink .9s steps(1) infinite}
+@keyframes vbBlink{50%{opacity:0}}
+.vb-sel{background:color-mix(in srgb,var(--c) 30%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 60%,transparent);border-radius:2px}
+
+/* появление */
+.vb-in{animation:vbIn .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes vbIn{from{clip-path:inset(0 100% 100% 0)}to{clip-path:inset(0 0 0 0)}}
+.vb-pop{animation:vbPop .4s cubic-bezier(.2,.9,.3,1.25) both}
+@keyframes vbPop{from{opacity:0;scale:.9}to{opacity:1;scale:1}}
+
+/* кнопка пропуска / повтора */
+.vb-skip{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:95;height:36px;padding:0 14px;border-radius:99px;border:1px solid var(--line2);background:var(--card);color:var(--txt);font:500 13px/1 Inter,system-ui,sans-serif;cursor:pointer;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:8px;transition:.2s}
+.vb-skip:hover{border-color:var(--txt)}
+.vb-skip i{width:7px;height:7px;border-radius:50%;background:#ff5c39;animation:vbBlink 1.2s steps(1) infinite}
+.vb-skip.done i{display:none}
